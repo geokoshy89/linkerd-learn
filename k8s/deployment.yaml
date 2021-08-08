@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linkerd-app-v1
+  labels:
+    app: linkerd-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: linkerd-app
+  template:
+    metadata:
+      labels:
+        app: linkerd-app
+    spec:
+      containers:
+        - name: linkerd-app-v1
+          image: foo/jib-image:error
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
